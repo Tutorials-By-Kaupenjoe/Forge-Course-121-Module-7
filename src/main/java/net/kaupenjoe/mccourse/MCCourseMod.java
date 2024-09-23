@@ -6,6 +6,9 @@ import net.kaupenjoe.mccourse.block.entity.ModBlockEntities;
 import net.kaupenjoe.mccourse.block.entity.renderer.PedestalBlockEntityRenderer;
 import net.kaupenjoe.mccourse.item.ModCreativeModeTabs;
 import net.kaupenjoe.mccourse.item.ModItems;
+import net.kaupenjoe.mccourse.screen.ModMenuTypes;
+import net.kaupenjoe.mccourse.screen.custom.PedestalScreen;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,6 +46,7 @@ public class MCCourseMod {
         ModBlocks.register(modEventBus);
 
         ModBlockEntities.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -75,7 +79,7 @@ public class MCCourseMod {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-
+            MenuScreens.register(ModMenuTypes.PEDESTAL_MENU.get(), PedestalScreen::new);
         }
 
         @SubscribeEvent
