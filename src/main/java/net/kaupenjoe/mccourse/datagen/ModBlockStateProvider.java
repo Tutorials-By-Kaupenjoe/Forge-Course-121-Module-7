@@ -47,10 +47,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockItem(ModBlocks.AZURITE_TRAPDOOR, "_bottom");
 
         // blockWithItem(ModBlocks.CRYSTALLIZER);
-        horizontalBlock(ModBlocks.CRYSTALLIZER.get(), models().orientable("mccourse:crystallizer",
-                mcLoc("block/blast_furnace_side"),
-                modLoc("block/crystallizer_front"),
-                mcLoc("block/blast_furnace_top")));
+        // horizontalBlock(ModBlocks.CRYSTALLIZER.get(), models().orientable("mccourse:crystallizer",
+        //         mcLoc("block/blast_furnace_side"),
+        //         modLoc("block/crystallizer_front"),
+        //         mcLoc("block/blast_furnace_top")));
 
         blockItem(ModBlocks.CRYSTALLIZER);
     }

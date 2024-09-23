@@ -71,7 +71,7 @@ public class ModBlocks {
             () -> new PedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)));
 
     public static final RegistryObject<Block> CRYSTALLIZER = registerBlock("crystallizer",
-            () -> new CrystallizerBlock(BlockBehaviour.Properties.of().strength(2f).requiresCorrectToolForDrops()));
+            () -> new CrystallizerBlock(BlockBehaviour.Properties.of().strength(2f).requiresCorrectToolForDrops().randomTicks()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
