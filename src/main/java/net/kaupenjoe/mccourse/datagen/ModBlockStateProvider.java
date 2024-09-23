@@ -3,6 +3,7 @@ package net.kaupenjoe.mccourse.datagen;
 import net.kaupenjoe.mccourse.MCCourseMod;
 import net.kaupenjoe.mccourse.block.ModBlocks;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -45,7 +46,13 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockItem(ModBlocks.AZURITE_FENCE_GATE);
         blockItem(ModBlocks.AZURITE_TRAPDOOR, "_bottom");
 
-        blockWithItem(ModBlocks.CRYSTALLIZER);
+        // blockWithItem(ModBlocks.CRYSTALLIZER);
+        horizontalBlock(ModBlocks.CRYSTALLIZER.get(), models().orientable("mccourse:crystallizer",
+                mcLoc("block/blast_furnace_side"),
+                modLoc("block/crystallizer_front"),
+                mcLoc("block/blast_furnace_top")));
+
+        blockItem(ModBlocks.CRYSTALLIZER);
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {
