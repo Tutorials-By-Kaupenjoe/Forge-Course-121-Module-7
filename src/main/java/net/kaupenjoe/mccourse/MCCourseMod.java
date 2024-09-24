@@ -6,6 +6,7 @@ import net.kaupenjoe.mccourse.block.entity.ModBlockEntities;
 import net.kaupenjoe.mccourse.block.entity.renderer.PedestalBlockEntityRenderer;
 import net.kaupenjoe.mccourse.item.ModCreativeModeTabs;
 import net.kaupenjoe.mccourse.item.ModItems;
+import net.kaupenjoe.mccourse.recipe.ModRecipes;
 import net.kaupenjoe.mccourse.screen.ModMenuTypes;
 import net.kaupenjoe.mccourse.screen.custom.CrystallizerScreen;
 import net.kaupenjoe.mccourse.screen.custom.PedestalScreen;
@@ -48,6 +49,8 @@ public class MCCourseMod {
 
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
+
+        ModRecipes.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

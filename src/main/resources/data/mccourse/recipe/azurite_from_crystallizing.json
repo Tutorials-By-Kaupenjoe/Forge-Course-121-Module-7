@@ -1,0 +1,10 @@
+{
+  "type": "mccourse:crystallizing",
+  "ingredient": {
+    "item": "mccourse:raw_azurite"
+  },
+  "result": {
+    "id": "mccourse:azurite",
+    "count": 12
+  }
+}

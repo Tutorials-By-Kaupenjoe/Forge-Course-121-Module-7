@@ -3,6 +3,9 @@ package net.kaupenjoe.mccourse.block.entity.custom;
 import net.kaupenjoe.mccourse.block.custom.CrystallizerBlock;
 import net.kaupenjoe.mccourse.block.entity.ModBlockEntities;
 import net.kaupenjoe.mccourse.item.ModItems;
+import net.kaupenjoe.mccourse.recipe.CrystallizerRecipe;
+import net.kaupenjoe.mccourse.recipe.CrystallizerRecipeInput;
+import net.kaupenjoe.mccourse.recipe.ModRecipes;
 import net.kaupenjoe.mccourse.screen.custom.CrystallizerMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,6 +23,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,6 +35,9 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.text.html.Option;
+import java.util.Optional;
 
 public class CrystallizerBlockEntity extends BlockEntity implements MenuProvider {
     public final ItemStackHandler itemHandler = new ItemStackHandler(4) {
@@ -164,7 +172,8 @@ public class CrystallizerBlockEntity extends BlockEntity implements MenuProvider
     }
 
     private void craftItem() {
-        ItemStack output = new ItemStack(ModItems.AZURITE.get());
+        Optional<RecipeHolder<CrystallizerRecipe>> recipe = getCurrentRecipe();
+        ItemStack output = recipe.get().value().output();
 
         itemHandler.extractItem(INPUT_SLOT, 1, false);
         itemHandler.setStackInSlot(OUTPUT_SLOT, new ItemStack(output.getItem(),
@@ -185,11 +194,18 @@ public class CrystallizerBlockEntity extends BlockEntity implements MenuProvider
     }
 
     private boolean hasRecipe() {
-        ItemStack input = new ItemStack(ModItems.RAW_AZURITE.get());
-        ItemStack output = new ItemStack(ModItems.AZURITE.get());
+        Optional<RecipeHolder<CrystallizerRecipe>> recipe = getCurrentRecipe();
+        if(recipe.isEmpty()) {
+            return false;
+        }
 
-        return canInsertAmountIntoOutputSlot(output.getCount()) && canInsertItemIntoOutputSlot(output) &&
-                itemHandler.getStackInSlot(INPUT_SLOT).getItem() == input.getItem();
+        ItemStack output = recipe.get().value().getResultItem(null);
+        return canInsertAmountIntoOutputSlot(output.getCount()) && canInsertItemIntoOutputSlot(output);
+    }
+
+    private Optional<RecipeHolder<CrystallizerRecipe>> getCurrentRecipe() {
+        return this.level.getRecipeManager()
+                .getRecipeFor(ModRecipes.CRYSTALLIZER_TYPE.get(), new CrystallizerRecipeInput(itemHandler.getStackInSlot(INPUT_SLOT)), level);
     }
 
     private boolean canInsertItemIntoOutputSlot(ItemStack output) {
