@@ -1,9 +1,10 @@
 package net.kaupenjoe.mccourse.screen.custom;
 
 import net.kaupenjoe.mccourse.block.ModBlocks;
-import net.kaupenjoe.mccourse.block.entity.custom.CrystallizerBlockEntity;
+import net.kaupenjoe.mccourse.block.entity.custom.CoalGeneratorBlockEntity;
 import net.kaupenjoe.mccourse.screen.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -13,19 +14,19 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class CrystallizerMenu extends AbstractContainerMenu {
-    public final CrystallizerBlockEntity blockEntity;
+public class CoalGeneratorMenu extends AbstractContainerMenu {
+    public final CoalGeneratorBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
 
-    public CrystallizerMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
+    public CoalGeneratorMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv, inv.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2));
     }
 
-
-    public CrystallizerMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.CRYSTALLIZER_MENU.get(), pContainerId);
-        blockEntity = ((CrystallizerBlockEntity) entity);
+    public CoalGeneratorMenu(int pContainerId, Inventory inv, BlockEntity blockEntity, ContainerData data) {
+        super(ModMenuTypes.COAL_GENERATOR_MENU.get(), pContainerId);
+        checkContainerSize(inv, 1);
+        this.blockEntity = ((CoalGeneratorBlockEntity) blockEntity);
         this.level = inv.player.level();
         this.data = data;
 
@@ -33,33 +34,22 @@ public class CrystallizerMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(itemHandler -> {
-            this.addSlot(new SlotItemHandler(itemHandler, 0, 8, 62));
-            this.addSlot(new SlotItemHandler(itemHandler, 1, 54, 34));
-            this.addSlot(new SlotItemHandler(itemHandler, 2, 104, 34));
-            this.addSlot(new SlotItemHandler(itemHandler, 3, 152, 62));
+            this.addSlot(new SlotItemHandler(itemHandler, 0, 80, 35));
         });
 
         addDataSlots(data);
     }
 
-    public boolean isCrafting() {
-        return data.get(0) > 0;
+    public boolean isBurning() {
+        return data.get(0) < 160;
     }
 
-    public int getScaledArrowProgress() {
-        int progress = this.data.get(0);
-        int maxProgress = this.data.get(1);
-        int arrowPixelSize = 24;
-
-        return maxProgress != 0 && progress != 0 ? progress * arrowPixelSize / maxProgress : 0;
-    }
-
-    public int getScaledCrystalProgress() {
-        int progress = this.data.get(0);
-        int maxProgress = this.data.get(1);
-        int crystalPixelSize = 16;
-
-        return maxProgress != 0 && progress != 0 ? progress * crystalPixelSize / maxProgress : 0;
+    public float getFuelProgress() {
+        int i = this.data.get(1);
+        if (i == 0) {
+            i = 160;
+        }
+        return Mth.clamp((float)this.data.get(0) / (float)i, 0.0f, 1.0f);
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
@@ -78,7 +68,7 @@ public class CrystallizerMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 1;  // must be the number of slots you have!
     @Override
     public ItemStack quickMoveStack(Player playerIn, int pIndex) {
         Slot sourceSlot = slots.get(pIndex);
@@ -115,7 +105,7 @@ public class CrystallizerMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player pPlayer) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-                pPlayer, ModBlocks.CRYSTALLIZER.get());
+                pPlayer, ModBlocks.COAL_GENERATOR.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {

@@ -55,6 +55,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
         this.dropSelf(ModBlocks.PEDESTAL.get());
         this.dropSelf(ModBlocks.CRYSTALLIZER.get());
+        this.dropSelf(ModBlocks.COAL_GENERATOR.get());
     }
 
     protected LootTable.Builder createMultipleOreDrops(Block pBlock, Item item, float minDrops, float maxDrops) {

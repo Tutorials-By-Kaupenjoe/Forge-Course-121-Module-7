@@ -29,6 +29,7 @@
 
   "block.mccourse.pedestal": "Pedestal",
   "block.mccourse.crystallizer": "Crystallizer",
+  "block.mccourse.coal_generator": "Coal Generator",
 
   "tooltip.mccourse.chainsaw.tooltip.shift": "Press §eShift§r for more Information!",
   "tooltip.mccourse.chainsaw.tooltip.1": "This Chainsaw will cut down trees fast!",

@@ -53,6 +53,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         //         mcLoc("block/blast_furnace_top")));
 
         blockItem(ModBlocks.CRYSTALLIZER);
+        blockWithItem(ModBlocks.COAL_GENERATOR);
     }
 
     private void blockWithItem(RegistryObject<Block> blockRegistryObject) {

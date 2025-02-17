@@ -56,6 +56,8 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModBlocks.PEDESTAL.get());
                         output.accept(ModBlocks.CRYSTALLIZER.get());
+
+                        output.accept(ModBlocks.COAL_GENERATOR.get());
                     }).build());
 
 

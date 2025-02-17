@@ -1,6 +1,7 @@
 package net.kaupenjoe.mccourse.screen;
 
 import net.kaupenjoe.mccourse.MCCourseMod;
+import net.kaupenjoe.mccourse.screen.custom.CoalGeneratorMenu;
 import net.kaupenjoe.mccourse.screen.custom.CrystallizerMenu;
 import net.kaupenjoe.mccourse.screen.custom.CrystallizerScreen;
 import net.kaupenjoe.mccourse.screen.custom.PedestalMenu;
@@ -22,6 +23,9 @@ public class ModMenuTypes {
 
     public static final RegistryObject<MenuType<CrystallizerMenu>> CRYSTALLIZER_MENU =
             registerMenuType("crystallizer_menu", CrystallizerMenu::new);
+
+    public static final RegistryObject<MenuType<CoalGeneratorMenu>> COAL_GENERATOR_MENU =
+            registerMenuType("coal_generator_menu", CoalGeneratorMenu::new);
 
     private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(String name,
                                                                                                  IContainerFactory<T> factory) {
