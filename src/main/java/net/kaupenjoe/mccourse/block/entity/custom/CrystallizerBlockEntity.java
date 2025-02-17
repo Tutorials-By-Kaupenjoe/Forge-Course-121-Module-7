@@ -2,6 +2,9 @@ package net.kaupenjoe.mccourse.block.entity.custom;
 
 import net.kaupenjoe.mccourse.block.custom.CrystallizerBlock;
 import net.kaupenjoe.mccourse.block.entity.ModBlockEntities;
+import net.kaupenjoe.mccourse.block.entity.inventory.InventoryDirectionEntry;
+import net.kaupenjoe.mccourse.block.entity.inventory.InventoryDirectionWrapper;
+import net.kaupenjoe.mccourse.block.entity.inventory.WrappedHandler;
 import net.kaupenjoe.mccourse.item.ModItems;
 import net.kaupenjoe.mccourse.recipe.CrystallizerRecipe;
 import net.kaupenjoe.mccourse.recipe.CrystallizerRecipeInput;
@@ -37,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.text.html.Option;
+import java.util.Map;
 import java.util.Optional;
 
 public class CrystallizerBlockEntity extends BlockEntity implements MenuProvider {
@@ -61,6 +65,15 @@ public class CrystallizerBlockEntity extends BlockEntity implements MenuProvider
     private int progress = 0;
     private int maxProgress = 72;
     private final int DEFAULT_MAX_PROGRESS = 72;
+
+    private final Map<Direction, LazyOptional<WrappedHandler>> directionWrappedHandlerMap =
+            new InventoryDirectionWrapper(itemHandler,
+                    new InventoryDirectionEntry(Direction.DOWN, OUTPUT_SLOT, false),
+                    new InventoryDirectionEntry(Direction.NORTH, INPUT_SLOT, true),
+                    new InventoryDirectionEntry(Direction.SOUTH, OUTPUT_SLOT, false),
+                    new InventoryDirectionEntry(Direction.EAST, INPUT_SLOT, true),
+                    new InventoryDirectionEntry(Direction.WEST, OUTPUT_SLOT, false),
+                    new InventoryDirectionEntry(Direction.UP, INPUT_SLOT, true)).directionsMap;
 
     public CrystallizerBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.CRYSTALLIZER_BE.get(), pPos, pBlockState);
@@ -105,6 +118,21 @@ public class CrystallizerBlockEntity extends BlockEntity implements MenuProvider
         if(cap == ForgeCapabilities.ITEM_HANDLER) {
             if(side == null) {
                 return lazyItemHandler.cast();
+            }
+
+            if(directionWrappedHandlerMap.containsKey(side)) {
+                Direction localDir = this.getBlockState().getValue(CrystallizerBlock.FACING);
+
+                if(side == Direction.DOWN ||side == Direction.UP) {
+                    return directionWrappedHandlerMap.get(side).cast();
+                }
+
+                return switch (localDir) {
+                    default -> directionWrappedHandlerMap.get(side).cast();
+                    case EAST -> directionWrappedHandlerMap.get(side.getCounterClockWise()).cast();
+                    case SOUTH -> directionWrappedHandlerMap.get(side.getOpposite()).cast();
+                    case WEST -> directionWrappedHandlerMap.get(side.getClockWise()).cast();
+                };
             }
         }
 
